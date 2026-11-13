@@ -49,7 +49,7 @@ class PokemonController extends Controller
     {
         $validated = Validator::make(['name' => $name], ['name' => ['required', 'string']])->validate();
 
-        $results = $pokeService->getPokemon($validated['name']);
+        $results = $pokeService->getPokemonSpecies($validated['name']);
 
         return $results;
     }
