@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(PokemonController::class)->group(function () {
     Route::get('/pokemons', 'getPokemons');
     Route::get('/pokemon/{name}', 'getPokemon');
+    Route::get('/pokemon-species/{name}', 'getPokemonSpecies');
     Route::get('/type/{name}', 'getType');
     Route::get('/ability/{name}', 'getAbility');
 });
