@@ -27,6 +27,7 @@ export function usePokemons(params: Omit<PokemonListRequest, "page">) {
     return useInfiniteQuery({
         queryKey: ["pokemons", { size, name: params.name ?? "" }],
         initialPageParam: "1",
+        staleTime: 1000 * 60 * 5,
         queryFn: ({ pageParam }) =>
             getPokemons({ size, page: pageParam, name: params.name }),
         getNextPageParam: (lastPage, _pages, lastPageParam) => {
