@@ -4,16 +4,40 @@ import { SubmitEvent, useState } from "react";
 import Image from "next/image";
 import { usePokemons } from "@/endpoints";
 
-export default function Home() {
-  const [query, setQuery] = useState("");
-  const [name, setName] = useState("");
-  const pokemons = usePokemons({ size: "20", name });
-  const cards = pokemons.data?.pages.flatMap((page) => page.data) ?? [];
+function SearchForm({ onSearch }: { onSearch: (name: string) => void }) {
+  const [localInput, setLocalInput] = useState("");
 
   function search(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setName(query.trim());
+    onSearch(localInput.trim());
   }
+
+  return (
+    <form
+      onSubmit={search}
+      className="sticky top-5 z-20 mb-4 flex gap-2 bg-zinc-50"
+    >
+      <input
+        type="text"
+        value={localInput}
+        onChange={(event) => setLocalInput(event.target.value)}
+        className="min-w-0 flex-1 rounded-md border border-gray-300 px-3 py-2 text-gray-700"
+        placeholder="Search Pokemon..."
+      />
+      <button
+        type="submit"
+        className="rounded-md bg-orange-400 px-4 py-2 text-white cursor-pointer"
+      >
+        Search
+      </button>
+    </form>
+  );
+}
+
+export default function Home() {
+  const [name, setName] = useState("");
+  const pokemons = usePokemons({ size: "20", name });
+  const cards = pokemons.data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
     <main className="flex min-h-screen flex-col gap-5 bg-zinc-50 p-5 font-sans">
@@ -63,24 +87,7 @@ export default function Home() {
         </div>
 
         <div className="min-w-0 flex-1">
-          <form
-            onSubmit={search}
-            className="sticky top-5 z-20 mb-4 flex gap-2 bg-zinc-50"
-          >
-            <input
-              type="text"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              className="min-w-0 flex-1 rounded-md border border-gray-300 px-3 py-2 text-gray-700"
-              placeholder="Search Pokemon..."
-            />
-            <button
-              type="submit"
-              className="rounded-md bg-orange-400 px-4 py-2 text-white cursor-pointer"
-            >
-              Search
-            </button>
-          </form>
+          <SearchForm onSearch={setName} />
 
           <div>
             {pokemons.isPending ? (
